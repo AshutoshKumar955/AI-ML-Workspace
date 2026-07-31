@@ -9,3 +9,7 @@ backend/__pycache__/
 
 # Environment
 .env
+
+# Python
+venv/
+

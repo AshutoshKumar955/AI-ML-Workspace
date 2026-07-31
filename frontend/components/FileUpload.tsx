@@ -1,24 +1,45 @@
 "use client";
 
 import { useRef } from "react";
+import api from "@/lib/api";
+import { DatasetInfo } from "@/types/dataset";
 
-export default function FileUpload() {
+interface FileUploadProps {
+  onUploadSuccess: (data: DatasetInfo) => void;
+}
+
+export default function FileUpload({
+  onUploadSuccess,
+}: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
+  const handleFileChange = async (
+  event: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = event.target.files?.[0];
 
-    if (!file) return;
+  if (!file) return;
 
-    console.log(file);
-    alert(`Selected File: ${file.name}`);
-  };
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await api.post("/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    onUploadSuccess(response.data);
+  } catch (error) {
+    console.error(error);
+    alert("Upload Failed");
+  }
+};
 
   return (
     <>

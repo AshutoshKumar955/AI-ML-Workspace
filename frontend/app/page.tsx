@@ -1,8 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import FileUpload from "@/components/FileUpload";
+import DatasetDetails from "@/components/DatasetInfo";
+import { DatasetInfo } from "@/types/dataset";
+import PreviewTable from "@/components/PreviewTable";
+
 
 export default function Home() {
+  const [dataset, setDataset] = useState<DatasetInfo | null>(null);
   return (
-    <main className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
       <div className="bg-white shadow-xl rounded-2xl p-10 w-[700px] text-center">
 
         <h1 className="text-5xl font-bold text-blue-600">
@@ -19,17 +27,25 @@ export default function Home() {
             📂
           </div>
 
-          <h2 className="text-2xl font-semibold mt-4">
+          <h2 className="text-3xl font-bold text-gray-800 mt-4">
             Upload Dataset
           </h2>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-600 mt-2">
             Drag & Drop your CSV file here
           </p>
 
-          <FileUpload />
+          <FileUpload onUploadSuccess={setDataset} />
+          
 
         </div>
+        {dataset && (
+          <>
+          <DatasetDetails data={dataset} />
+          <PreviewTable data={dataset} />
+          </>
+        )}
+
 
       </div>
     </main>
