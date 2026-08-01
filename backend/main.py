@@ -1,3 +1,18 @@
+from modules import (
+    basic_info,
+    col_summary,
+    missing_values,
+    duplicate_values,
+    invalid_values,
+    numerical_statistics,
+    categorical_statistics,
+    datetime_statistics,
+    check_outliers,
+    check_correlation,
+    distribution_analysis,
+    kurtosis,
+)
+
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
@@ -36,3 +51,24 @@ async def upload_csv(file: UploadFile = File(...)):
         "column_names": df.columns.tolist(),
         "preview": df.head().to_dict(orient="records")
     }
+
+@app.post("/eda")
+async def analyze_dataset(file: UploadFile = File(...)):
+    df = pd.read_csv(file.file)
+
+    report = {
+        "basic_info": basic_info(df),
+        "column_summary": col_summary(df),
+        "missing_analysis": missing_values(df),
+        "duplicate_analysis": duplicate_values(df),
+        "invalid_value_analysis": invalid_values(df),
+        "numerical_statistics": numerical_statistics(df),
+        "categorical_statistics": categorical_statistics(df),
+        "datetime_statistics": datetime_statistics(df),
+        "outlier_analysis": check_outliers(df),
+        "correlation_analysis": check_correlation(df),
+        "distribution_analysis": distribution_analysis(df),
+        "kurtosis_analysis": kurtosis(df),
+    }
+
+    return report
