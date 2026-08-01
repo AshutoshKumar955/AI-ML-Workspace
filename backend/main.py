@@ -1,17 +1,4 @@
-from modules import (
-    basic_info,
-    col_summary,
-    missing_values,
-    duplicate_values,
-    invalid_values,
-    numerical_statistics,
-    categorical_statistics,
-    datetime_statistics,
-    check_outliers,
-    check_correlation,
-    distribution_analysis,
-    kurtosis,
-)
+from modules import *
 
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
